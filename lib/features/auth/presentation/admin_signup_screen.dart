@@ -41,6 +41,7 @@ class _AdminSignupScreenState extends ConsumerState<AdminSignupScreen> {
             password: _form.value['password'] as String,
             inviteCode: (_form.value['inviteCode'] as String).trim().toUpperCase(),
           );
+      if (mounted) context.go('/admin');
     } catch (e) {
       setState(() => _errorMessage = _friendlyError(e.toString()));
     } finally {

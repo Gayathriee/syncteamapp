@@ -43,21 +43,15 @@ final routerProvider = Provider<GoRouter>((ref) {
     initialLocation: '/',
     redirect: (context, state) {
       final authAsync = ref.read(firebaseAuthStateProvider);
-      final userAsync = ref.read(currentUserModelProvider);
 
-      // Still resolving — hold at splash while we wait
-      if (authAsync.isLoading || userAsync.isLoading) {
+      // Still resolving Firebase auth — stay at splash
+      if (authAsync.isLoading) {
         return state.matchedLocation == '/' ? null : '/';
       }
 
-      final firebaseUser = authAsync.valueOrNull;
-      final userModel = userAsync.valueOrNull;
-      final isLoggedIn = firebaseUser != null;
-      final isAdmin = userModel?.isAdmin ?? false;
-
+      final isLoggedIn = authAsync.valueOrNull != null;
       final loc = state.matchedLocation;
 
-      // Routes that don't require authentication
       const publicRoutes = {
         '/',
         '/onboarding',
@@ -68,27 +62,15 @@ final routerProvider = Provider<GoRouter>((ref) {
       };
       final isPublic = publicRoutes.contains(loc);
 
+      // Unauthenticated users can only access public routes
       if (!isLoggedIn) {
-        // Send unauthenticated users to the login screen unless they're already
-        // on a public route (onboarding, splash, admin invite signup etc.)
         return isPublic ? null : '/login';
       }
 
-      // Authenticated users shouldn't linger on auth screens
-      if (isPublic) {
-        return isAdmin ? '/admin' : '/dashboard';
-      }
-
-      // Cross-role guards — gentle redirects rather than errors
-      if (isAdmin) {
-        if (loc.startsWith('/dashboard')) return '/admin';
-        // Participant-specific session routes (not the admin monitor)
-        if (loc.startsWith('/session/') && !loc.startsWith('/admin/session/')) {
-          return '/admin';
-        }
-      } else {
-        if (loc.startsWith('/admin')) return '/dashboard';
-      }
+      // Logged-in users hitting splash/onboarding — send to login so they
+      // can navigate to the right screen. The login screens navigate
+      // explicitly to /dashboard or /admin after verifying the role.
+      if (loc == '/' || loc == '/onboarding') return '/login';
 
       return null;
     },

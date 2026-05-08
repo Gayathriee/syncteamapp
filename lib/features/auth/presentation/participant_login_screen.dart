@@ -41,7 +41,7 @@ class _ParticipantLoginScreenState
             email: _form.value['email'] as String,
             password: _form.value['password'] as String,
           );
-      // Router guard handles navigation after auth state updates
+      if (mounted) context.go('/dashboard');
     } catch (e) {
       setState(() => _errorMessage = _friendlyError(e.toString()));
     } finally {

@@ -51,6 +51,7 @@ class _ParticipantSignupScreenState
             password: _form.value['password'] as String,
             variant: _selectedVariant,
           );
+      if (mounted) context.go('/dashboard');
     } catch (e) {
       setState(() => _errorMessage = _friendlyError(e.toString()));
     } finally {

@@ -39,6 +39,7 @@ class _AdminLoginScreenState extends ConsumerState<AdminLoginScreen> {
             email: _form.value['email'] as String,
             password: _form.value['password'] as String,
           );
+      if (mounted) context.go('/admin');
     } catch (e) {
       setState(() => _errorMessage = _friendlyError(e.toString()));
     } finally {
