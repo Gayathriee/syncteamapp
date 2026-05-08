@@ -1,0 +1,67 @@
+name: syncteam
+description: >
+  Final-year thesis project — real-time HRV synchrony system with rule-based
+  AI intervention agent. Built for a 30-participant study.
+publish_to: none
+
+version: 1.0.0+1
+
+environment:
+  sdk: ">=3.3.0 <4.0.0"
+
+dependencies:
+  flutter:
+    sdk: flutter
+
+  # Firebase — staying on Firebase SDK v3 which is stable on Flutter 3.x
+  firebase_core: ^3.6.0
+  firebase_auth: ^5.3.1
+  cloud_firestore: ^5.4.4
+  firebase_database: ^11.1.4
+
+  # State management — Riverpod without code-gen keeps the code readable
+  # for an examiner who doesn't know Flutter well. The @riverpod annotation
+  # system is clever but adds a build step that confuses newcomers.
+  flutter_riverpod: ^2.5.1
+
+  # Navigation — GoRouter's redirect guards map cleanly onto the
+  # auth/role gate logic described in §3.2 of the thesis.
+  go_router: ^14.2.7
+
+  # Immutable models — Freezed's copyWith and pattern matching on
+  # SessionStatus is what makes the state machine readable.
+  freezed_annotation: ^2.4.4
+  json_annotation: ^4.9.0
+
+  # Charts for live HRV waveforms and synchrony sparklines
+  fl_chart: ^0.69.0
+
+  # Fonts — same as web. Fraunces for display, DM Sans for body.
+  # Using Google Fonts at runtime because bundling the TTFs and
+  # keeping them in sync with the web is more hassle than it's worth
+  # for a single-study deployment.
+  google_fonts: ^6.2.1
+
+  # Forms — typed reactive forms are easier to unit-test than
+  # GlobalKey<FormState> and TextEditingControllers
+  reactive_forms: ^17.0.1
+
+  shared_preferences: ^2.3.2
+  uuid: ^4.5.1
+  intl: ^0.20.2
+  logger: ^2.4.0
+  flutter_svg: ^2.0.10
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+  flutter_lints: ^4.0.0
+  build_runner: ^2.4.12
+  freezed: ^2.5.7
+  json_serializable: ^6.8.0
+
+flutter:
+  uses-material-design: true
+  assets:
+    - assets/images/
+    - assets/icons/
