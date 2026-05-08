@@ -239,4 +239,20 @@ class SessionRepository {
         .get();
     return snap.count ?? 0;
   }
+
+  /// Returns the session currently in survey state for this user, if any.
+  /// Used by the participant shell badge and survey tab to detect pending surveys.
+  Stream<SessionModel?> watchSurveyPendingSession(String uid) {
+    return _db
+        .collection('sessions')
+        .where('memberUids', arrayContains: uid)
+        .where('status', isEqualTo: SessionStatus.survey.name)
+        .limit(1)
+        .snapshots()
+        .map((qs) {
+      if (qs.docs.isEmpty) return null;
+      final doc = qs.docs.first;
+      return SessionModel.fromJson({'id': doc.id, ...doc.data()});
+    });
+  }
 }

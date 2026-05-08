@@ -4,18 +4,15 @@ import 'package:go_router/go_router.dart';
 
 import '../../features/admin/presentation/admin_ai_config_screen.dart';
 import '../../features/admin/presentation/admin_export_screen.dart';
-import '../../features/admin/presentation/admin_home_screen.dart';
-import '../../features/admin/presentation/admin_live_list_screen.dart';
-import '../../features/admin/presentation/admin_participants_screen.dart';
 import '../../features/admin/presentation/admin_session_monitor_screen.dart';
-import '../../features/admin/presentation/admin_tasks_screen.dart';
+import '../../features/admin/presentation/admin_shell.dart';
 import '../../features/auth/presentation/admin_login_screen.dart';
 import '../../features/auth/presentation/admin_signup_screen.dart';
 import '../../features/auth/presentation/onboarding_screen.dart';
 import '../../features/auth/presentation/participant_login_screen.dart';
 import '../../features/auth/presentation/participant_signup_screen.dart';
 import '../../features/auth/presentation/splash_screen.dart';
-import '../../features/dashboard/presentation/participant_dashboard_screen.dart';
+import '../../features/dashboard/presentation/participant_shell.dart';
 import '../../features/session/presentation/session_break_screen.dart';
 import '../../features/session/presentation/session_results_screen.dart';
 import '../../features/session/presentation/session_room_screen.dart';
@@ -26,9 +23,6 @@ import '../../shared/providers/auth_state_provider.dart';
 // guards re-evaluate whenever auth state changes (login, logout, role load).
 class _RouterNotifier extends ChangeNotifier {
   _RouterNotifier(Ref ref) {
-    // Listen to the derived user model — this fires after both the Firebase
-    // auth token AND the Firestore role doc have resolved, which avoids the
-    // brief flash where an admin sees the participant dashboard (§3.2).
     ref.listen<AsyncValue<dynamic>>(currentUserModelProvider, (_, __) {
       notifyListeners();
     });
@@ -44,7 +38,6 @@ final routerProvider = Provider<GoRouter>((ref) {
     redirect: (context, state) {
       final authAsync = ref.read(firebaseAuthStateProvider);
 
-      // Still resolving Firebase auth — stay at splash
       if (authAsync.isLoading) {
         return state.matchedLocation == '/' ? null : '/';
       }
@@ -62,14 +55,7 @@ final routerProvider = Provider<GoRouter>((ref) {
       };
       final isPublic = publicRoutes.contains(loc);
 
-      // Unauthenticated users can only access public routes
-      if (!isLoggedIn) {
-        return isPublic ? null : '/login';
-      }
-
-      // Logged-in users hitting splash/onboarding — send to login so they
-      // can navigate to the right screen. The login screens navigate
-      // explicitly to /dashboard or /admin after verifying the role.
+      if (!isLoggedIn) return isPublic ? null : '/login';
       if (loc == '/' || loc == '/onboarding') return '/login';
 
       return null;
@@ -104,11 +90,13 @@ final routerProvider = Provider<GoRouter>((ref) {
         builder: (_, __) => const AdminSignupScreen(),
       ),
 
-      // ── Participant routes ─────────────────────────────────────────────────
+      // ── Participant shell (4-tab bottom nav) ──────────────────────────────
       GoRoute(
         path: '/dashboard',
-        builder: (_, __) => const ParticipantDashboardScreen(),
+        builder: (_, __) => const ParticipantShell(),
       ),
+
+      // ── Session routes (full-screen, outside the shell) ───────────────────
       GoRoute(
         path: '/session/:sessionId',
         builder: (_, state) =>
@@ -132,27 +120,17 @@ final routerProvider = Provider<GoRouter>((ref) {
         ],
       ),
 
-      // ── Admin routes ───────────────────────────────────────────────────────
+      // ── Admin shell (4-tab bottom nav) ────────────────────────────────────
       GoRoute(
         path: '/admin',
-        builder: (_, __) => const AdminHomeScreen(),
+        builder: (_, __) => const AdminShell(),
       ),
-      GoRoute(
-        path: '/admin/live',
-        builder: (_, __) => const AdminLiveListScreen(),
-      ),
+
+      // ── Admin full-screen routes (push over the shell) ───────────────────
       GoRoute(
         path: '/admin/session/:sessionId',
         builder: (_, state) => AdminSessionMonitorScreen(
             sessionId: state.pathParameters['sessionId']!),
-      ),
-      GoRoute(
-        path: '/admin/tasks',
-        builder: (_, __) => const AdminTasksScreen(),
-      ),
-      GoRoute(
-        path: '/admin/participants',
-        builder: (_, __) => const AdminParticipantsScreen(),
       ),
       GoRoute(
         path: '/admin/ai-config',

@@ -6,7 +6,6 @@ import '../../../core/theme/app_colors.dart';
 import '../../../core/theme/app_typography.dart';
 import '../../../shared/providers/auth_state_provider.dart';
 import '../../../shared/widgets/monster_avatar.dart';
-import '../domain/user_model.dart';
 
 class ParticipantSignupScreen extends ConsumerStatefulWidget {
   const ParticipantSignupScreen({super.key});

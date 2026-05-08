@@ -4,6 +4,7 @@ import 'package:go_router/go_router.dart';
 import '../../../core/theme/app_colors.dart';
 import '../../../core/theme/app_typography.dart';
 import '../../../shared/providers/auth_state_provider.dart';
+import 'admin_shell.dart';
 
 final _enrolledCountProvider = FutureProvider<int>((ref) {
   return ref.watch(sessionRepositoryProvider).getEnrolledParticipantCount();
@@ -157,7 +158,7 @@ class _ActiveSessionsBanner extends ConsumerWidget {
     if (count == 0) return const SizedBox.shrink();
 
     return GestureDetector(
-      onTap: () => context.go('/admin/live'),
+      onTap: () => ref.read(adminTabIndexProvider.notifier).state = 1,
       child: Container(
         padding: const EdgeInsets.all(14),
         decoration: BoxDecoration(
@@ -192,19 +193,21 @@ class _ActiveSessionsBanner extends ConsumerWidget {
   }
 }
 
-class _QuickActionsGrid extends StatelessWidget {
+class _QuickActionsGrid extends ConsumerWidget {
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
+    // Tabs 1,2,3 switch within the shell; AI-config and export push full routes.
     final actions = [
       (Icons.play_circle_outline_rounded, 'live sessions', AppColors.teal,
-          '/admin/live'),
-      (Icons.task_alt_rounded, 'tasks', AppColors.mustard, '/admin/tasks'),
+          () => ref.read(adminTabIndexProvider.notifier).state = 1),
+      (Icons.task_alt_rounded, 'tasks', AppColors.mustard,
+          () => ref.read(adminTabIndexProvider.notifier).state = 2),
       (Icons.people_outline_rounded, 'participants', AppColors.lavender,
-          '/admin/participants'),
+          () => ref.read(adminTabIndexProvider.notifier).state = 3),
       (Icons.psychology_rounded, 'AI config', AppColors.sage,
-          '/admin/ai-config'),
+          () => context.go('/admin/ai-config')),
       (Icons.download_rounded, 'export data', AppColors.coral,
-          '/admin/export'),
+          () => context.go('/admin/export')),
     ];
 
     return Wrap(
@@ -212,7 +215,7 @@ class _QuickActionsGrid extends StatelessWidget {
       runSpacing: 10,
       children: actions.map((action) {
         return GestureDetector(
-          onTap: () => context.go(action.$4),
+          onTap: action.$4,
           child: Container(
             width: (MediaQuery.of(context).size.width - 56) / 2,
             padding: const EdgeInsets.all(16),
@@ -226,8 +229,7 @@ class _QuickActionsGrid extends StatelessWidget {
                 Icon(action.$1, color: action.$3, size: 22),
                 const SizedBox(width: 10),
                 Text(action.$2,
-                    style: AppTypography.labelMedium
-                        .copyWith(color: action.$3)),
+                    style: AppTypography.labelMedium.copyWith(color: action.$3)),
               ],
             ),
           ),
