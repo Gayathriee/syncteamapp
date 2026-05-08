@@ -29,7 +29,7 @@ dependencies:
   go_router: ^14.2.7
 
   # Immutable models — Freezed's copyWith and pattern matching on
-  # SessionStatus is what makes the state machine readable.
+  # SessionStatus is what makes the state machine-readable.
   freezed_annotation: ^2.4.4
   json_annotation: ^4.9.0
 
@@ -37,9 +37,9 @@ dependencies:
   fl_chart: ^0.69.0
 
   # Fonts — same as web. Fraunces for display, DM Sans for body.
-  # Using Google Fonts at runtime because bundling the TTFs and
-  # keeping them in sync with the web is more hassle than it's worth
-  # for a single-study deployment.
+  # allowRuntimeFetching is disabled in main.dart so the app works offline
+  # in the study lab. TTF files are bundled under assets/fonts/ so
+  # google_fonts can serve them without a network call.
   google_fonts: ^6.2.1
 
   # Forms — typed reactive forms are easier to unit-test than
@@ -65,3 +65,26 @@ flutter:
   assets:
     - assets/images/
     - assets/icons/
+    - assets/fonts/
+
+  # google_fonts picks up TTF files declared here when allowRuntimeFetching=false.
+  # File names must match exactly what google_fonts expects (snake_case).
+  fonts:
+    - family: Fraunces
+      fonts:
+        - asset: assets/fonts/Fraunces-Regular.ttf
+        - asset: assets/fonts/Fraunces-SemiBold.ttf
+          weight: 600
+        - asset: assets/fonts/Fraunces-Bold.ttf
+          weight: 700
+        - asset: assets/fonts/Fraunces-Italic.ttf
+          style: italic
+    - family: DMSans
+      fonts:
+        - asset: assets/fonts/DMSans-Regular.ttf
+        - asset: assets/fonts/DMSans-Medium.ttf
+          weight: 500
+        - asset: assets/fonts/DMSans-SemiBold.ttf
+          weight: 600
+        - asset: assets/fonts/DMSans-Bold.ttf
+          weight: 700
