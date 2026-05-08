@@ -37,7 +37,7 @@ class _AdminExportScreenState extends State<AdminExportScreen> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
-            _ExportCard(
+            const _ExportCard(
               icon: Icons.favorite_outlined,
               title: 'HRV summaries',
               description:
@@ -46,16 +46,16 @@ class _AdminExportScreenState extends State<AdminExportScreen> {
               color: AppColors.coral,
             ),
             const SizedBox(height: 12),
-            _ExportCard(
+            const _ExportCard(
               icon: Icons.sync_rounded,
               title: 'synchrony windows',
               description:
                   'Group synchrony index and pairwise Pearson r values sampled '
-                  'every ${15}s per session. Useful for time-series analysis in R.',
+                  'every 15s per session. Useful for time-series analysis in R.',
               color: AppColors.teal,
             ),
             const SizedBox(height: 12),
-            _ExportCard(
+            const _ExportCard(
               icon: Icons.assignment_rounded,
               title: 'survey responses',
               description:
@@ -64,7 +64,7 @@ class _AdminExportScreenState extends State<AdminExportScreen> {
               color: AppColors.mustard,
             ),
             const SizedBox(height: 12),
-            _ExportCard(
+            const _ExportCard(
               icon: Icons.notifications_rounded,
               title: 'intervention log',
               description:
@@ -78,7 +78,7 @@ class _AdminExportScreenState extends State<AdminExportScreen> {
               decoration: BoxDecoration(
                 color: AppColors.mustardLight,
                 borderRadius: BorderRadius.circular(12),
-                border: Border.all(color: AppColors.mustard.withOpacity(0.3)),
+                border: Border.all(color: AppColors.mustard.withValues(alpha: 0.3)),
               ),
               child: Text(
                 '⚠️  the export function is not yet deployed. '
@@ -155,7 +155,7 @@ class _ExportCard extends StatelessWidget {
           Container(
             padding: const EdgeInsets.all(8),
             decoration: BoxDecoration(
-              color: color.withOpacity(0.1),
+              color: color.withValues(alpha: 0.1),
               borderRadius: BorderRadius.circular(10),
             ),
             child: Icon(icon, size: 18, color: color),

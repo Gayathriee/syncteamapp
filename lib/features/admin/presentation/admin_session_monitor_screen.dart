@@ -317,7 +317,7 @@ class _StatusChip extends StatelessWidget {
             Container(
               width: 5,
               height: 5,
-              decoration: BoxDecoration(
+              decoration: const BoxDecoration(
                   color: AppColors.signalGood, shape: BoxShape.circle),
             ),
             const SizedBox(width: 4),
@@ -356,9 +356,9 @@ class _MemberStatsRow extends StatelessWidget {
             margin: EdgeInsets.only(right: i < session!.memberUids.length - 1 ? 8 : 0),
             padding: const EdgeInsets.all(10),
             decoration: BoxDecoration(
-              color: _colors[i % 3].withOpacity(0.08),
+              color: _colors[i % 3].withValues(alpha: 0.08),
               borderRadius: BorderRadius.circular(10),
-              border: Border.all(color: _colors[i % 3].withOpacity(0.2)),
+              border: Border.all(color: _colors[i % 3].withValues(alpha: 0.2)),
             ),
             child: Column(
               children: [
@@ -367,7 +367,7 @@ class _MemberStatsRow extends StatelessWidget {
                     Container(
                       width: 6,
                       height: 6,
-                      decoration: BoxDecoration(
+                      decoration: const BoxDecoration(
                           color: AppColors.signalGood, shape: BoxShape.circle),
                     ),
                     const SizedBox(width: 4),

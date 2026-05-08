@@ -69,7 +69,7 @@ class SessionResultsScreen extends ConsumerWidget {
                     label: 'session duration',
                     value: _formatDuration(session?.startedAtMs),
                   ),
-                  _StatRow(
+                  const _StatRow(
                     label: 'AI interventions received',
                     value: '—',
                   ),

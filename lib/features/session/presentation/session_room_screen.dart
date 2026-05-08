@@ -432,7 +432,7 @@ class _MemberTile extends ConsumerWidget {
               Container(
                 width: 5,
                 height: 5,
-                decoration: BoxDecoration(
+                decoration: const BoxDecoration(
                     color: AppColors.signalNoisy, shape: BoxShape.circle),
               ),
               const SizedBox(width: 3),

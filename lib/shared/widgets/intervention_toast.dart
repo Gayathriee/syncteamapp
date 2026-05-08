@@ -102,7 +102,7 @@ class _InterventionToastState extends State<InterventionToast>
                   onTap: _dismiss,
                   child: Padding(
                     padding: const EdgeInsets.only(left: 8),
-                    child: Icon(Icons.close_rounded, size: 16, color: Colors.white38),
+                    child: const Icon(Icons.close_rounded, size: 16, color: Colors.white38),
                   ),
                 ),
               ],

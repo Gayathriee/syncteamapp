@@ -55,7 +55,7 @@ class _SplashScreenState extends ConsumerState<SplashScreen>
     await Future.delayed(const Duration(milliseconds: 100));
     await _textController.forward();
     await Future.delayed(
-        Duration(milliseconds: AppConstants.splashDurationMs - 900));
+        const Duration(milliseconds: AppConstants.splashDurationMs - 900));
 
     if (!mounted) return;
 

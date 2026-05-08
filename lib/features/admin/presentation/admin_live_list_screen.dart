@@ -59,7 +59,7 @@ class AdminLiveListScreen extends ConsumerWidget {
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  Icon(Icons.sensors_off_rounded,
+                  const Icon(Icons.sensors_off_rounded,
                       size: 48, color: Colors.white24),
                   const SizedBox(height: 12),
                   Text('no active sessions',
@@ -132,7 +132,7 @@ class _LiveSessionCard extends ConsumerWidget {
         decoration: BoxDecoration(
           color: AppColors.sessionSurface,
           borderRadius: BorderRadius.circular(16),
-          border: Border.all(color: Colors.white.withOpacity(0.06)),
+          border: Border.all(color: Colors.white.withValues(alpha: 0.06)),
         ),
         child: Row(
           children: [
@@ -286,12 +286,13 @@ class _CreateSessionDialogState extends State<_CreateSessionDialog> {
                     _uid3Ctrl.text.trim(),
                   ].where((s) => s.isNotEmpty).toList();
 
+                  final nav = Navigator.of(context);
                   await widget.ref.read(sessionRepositoryProvider).createSession(
                         teamId: _teamIdCtrl.text.trim(),
                         memberUids: memberUids,
                         taskId: _taskIdCtrl.text.trim(),
                       );
-                  if (mounted) Navigator.pop(context);
+                  if (mounted) nav.pop();
                 },
           child: _isCreating
               ? const SizedBox(

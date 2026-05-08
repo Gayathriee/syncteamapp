@@ -51,7 +51,7 @@ class _AdminAiConfigScreenState extends ConsumerState<AdminAiConfigScreen> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
-            _InfoBanner(
+            const _InfoBanner(
               text: 'changes affect new sessions only — currently running '
                   'sessions use the thresholds from when they started.',
             ),
@@ -164,7 +164,7 @@ class _InfoBanner extends StatelessWidget {
       ),
       child: Row(
         children: [
-          Icon(Icons.info_outline_rounded,
+          const Icon(Icons.info_outline_rounded,
               size: 16, color: AppColors.mustard),
           const SizedBox(width: 8),
           Expanded(

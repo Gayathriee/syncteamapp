@@ -90,7 +90,7 @@ class _AdminSignupScreenState extends ConsumerState<AdminSignupScreen> {
               ),
               child: Row(
                 children: [
-                  Icon(Icons.info_outline_rounded,
+                  const Icon(Icons.info_outline_rounded,
                       size: 18, color: AppColors.lavender),
                   const SizedBox(width: 10),
                   Expanded(

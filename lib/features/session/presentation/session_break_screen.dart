@@ -75,12 +75,12 @@ class _SessionBreakScreenState extends ConsumerState<SessionBreakScreen>
                       shape: BoxShape.circle,
                       gradient: RadialGradient(
                         colors: [
-                          AppColors.sage.withOpacity(0.4),
-                          AppColors.teal.withOpacity(0.1),
+                          AppColors.sage.withValues(alpha: 0.4),
+                          AppColors.teal.withValues(alpha: 0.1),
                         ],
                       ),
                       border: Border.all(
-                          color: AppColors.sage.withOpacity(0.5), width: 2),
+                          color: AppColors.sage.withValues(alpha: 0.5), width: 2),
                     ),
                     child: Column(
                       mainAxisAlignment: MainAxisAlignment.center,
@@ -120,9 +120,9 @@ class _SessionBreakScreenState extends ConsumerState<SessionBreakScreen>
                           style: AppTypography.sessionBody
                               .copyWith(color: Colors.white60)),
                       const SizedBox(height: 10),
-                      _BreakTip(icon: '💧', text: 'have some water'),
-                      _BreakTip(icon: '🧘', text: 'take a few deep breaths'),
-                      _BreakTip(
+                      const _BreakTip(icon: '💧', text: 'have some water'),
+                      const _BreakTip(icon: '🧘', text: 'take a few deep breaths'),
+                      const _BreakTip(
                           icon: '👀',
                           text: 'look away from the screen for 20 seconds'),
                     ],

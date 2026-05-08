@@ -176,7 +176,7 @@ class _TaskCardState extends State<_TaskCard> {
                       ),
                       child: Row(
                         children: [
-                          Icon(Icons.lightbulb_outline_rounded,
+                          const Icon(Icons.lightbulb_outline_rounded,
                               size: 14, color: AppColors.mustard),
                           const SizedBox(width: 6),
                           Expanded(
@@ -198,13 +198,13 @@ class _TaskCardState extends State<_TaskCard> {
                       const SizedBox(width: 8),
                       OutlinedButton.icon(
                         onPressed: widget.onDelete,
-                        icon: Icon(Icons.delete_outline_rounded,
+                        icon: const Icon(Icons.delete_outline_rounded,
                             size: 14, color: AppColors.coral),
                         label: Text('delete',
                             style: AppTypography.labelMedium
                                 .copyWith(color: AppColors.coral)),
                         style: OutlinedButton.styleFrom(
-                            side: BorderSide(color: AppColors.coral)),
+                            side: const BorderSide(color: AppColors.coral)),
                       ),
                     ],
                   ),
@@ -365,7 +365,7 @@ class _EmptyTasksView extends StatelessWidget {
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          Icon(Icons.task_alt_rounded, size: 48, color: AppColors.border),
+          const Icon(Icons.task_alt_rounded, size: 48, color: AppColors.border),
           const SizedBox(height: 12),
           Text('no tasks yet', style: AppTypography.headingSmall),
           const SizedBox(height: 6),

@@ -289,11 +289,11 @@ class _BaselineNudgeCard extends StatelessWidget {
       decoration: BoxDecoration(
         color: AppColors.mustardLight,
         borderRadius: BorderRadius.circular(14),
-        border: Border.all(color: AppColors.mustard.withOpacity(0.4)),
+        border: Border.all(color: AppColors.mustard.withValues(alpha: 0.4)),
       ),
       child: Row(
         children: [
-          Icon(Icons.favorite_border_rounded,
+          const Icon(Icons.favorite_border_rounded,
               color: AppColors.mustard, size: 22),
           const SizedBox(width: 12),
           Expanded(

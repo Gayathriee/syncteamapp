@@ -92,7 +92,7 @@ class _SyncRingState extends State<SyncRing> with SingleTickerProviderStateMixin
           painter: _SyncRingPainter(
             syncValue: current,
             ringColor: colour,
-            trackColor: Colors.white.withOpacity(0.08),
+            trackColor: Colors.white.withValues(alpha: 0.08),
             strokeWidth: widget.strokeWidth,
           ),
           child: widget.showLabel

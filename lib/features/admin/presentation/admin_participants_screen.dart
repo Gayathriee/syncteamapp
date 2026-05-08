@@ -28,7 +28,7 @@ class AdminParticipantsScreen extends StatelessWidget {
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              Icon(Icons.people_outline_rounded,
+              const Icon(Icons.people_outline_rounded,
                   size: 56, color: AppColors.border),
               const SizedBox(height: 16),
               Text('participant table', style: AppTypography.headingSmall),

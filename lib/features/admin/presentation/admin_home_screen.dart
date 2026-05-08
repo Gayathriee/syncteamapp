@@ -253,7 +253,7 @@ class _RecentInterventionsFeed extends ConsumerWidget {
         children: [
           Row(
             children: [
-              Icon(Icons.notifications_none_rounded,
+              const Icon(Icons.notifications_none_rounded,
                   size: 16, color: AppColors.warm),
               const SizedBox(width: 8),
               Text('no recent interventions',
