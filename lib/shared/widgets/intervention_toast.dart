@@ -100,9 +100,9 @@ class _InterventionToastState extends State<InterventionToast>
                 ),
                 GestureDetector(
                   onTap: _dismiss,
-                  child: Padding(
-                    padding: const EdgeInsets.only(left: 8),
-                    child: const Icon(Icons.close_rounded, size: 16, color: Colors.white38),
+                  child: const Padding(
+                    padding: EdgeInsets.only(left: 8),
+                    child: Icon(Icons.close_rounded, size: 16, color: Colors.white38),
                   ),
                 ),
               ],

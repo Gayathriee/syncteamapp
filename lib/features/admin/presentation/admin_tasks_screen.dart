@@ -80,7 +80,7 @@ class AdminTasksScreen extends ConsumerWidget {
               ref.read(sessionRepositoryProvider).deleteTask(task.id);
               Navigator.pop(context);
             },
-            child: Text('delete', style: TextStyle(color: AppColors.coral)),
+            child: Text('delete', style: const TextStyle(color: AppColors.coral)),
           ),
         ],
       ),
