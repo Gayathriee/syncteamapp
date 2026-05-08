@@ -22,6 +22,7 @@ class _AdminLoginScreenState extends ConsumerState<AdminLoginScreen> {
   });
 
   bool _isLoading = false;
+  bool _passwordVisible = false;
   String? _errorMessage;
 
   Future<void> _signIn() async {
@@ -46,14 +47,20 @@ class _AdminLoginScreenState extends ConsumerState<AdminLoginScreen> {
   }
 
   String _friendlyError(String raw) {
+    if (raw.contains('network') || raw.contains('SocketException') ||
+        raw.contains('host lookup') || raw.contains('RecaptchaCallWrapper')) {
+      return "no internet connection — connect to WiFi and try again";
+    }
     if (raw.contains('user-not-found') || raw.contains('wrong-password') ||
-        raw.contains('invalid-credential')) {
+        raw.contains('invalid-credential') || raw.contains('INVALID_LOGIN_CREDENTIALS')) {
       return "credentials not recognised — check your email and password";
     }
-    if (raw.contains('not an admin')) {
-      return "that account doesn't have admin access";
+    if (raw.contains('not an admin') || raw.contains('admin profile missing')) {
+      return raw.contains('profile missing')
+          ? raw
+          : "that account doesn't have admin access";
     }
-    return "sign in failed — try again";
+    return "sign in failed: $raw";
   }
 
   @override
@@ -137,10 +144,22 @@ class _AdminLoginScreenState extends ConsumerState<AdminLoginScreen> {
                           const SizedBox(height: 12),
                           ReactiveTextField<String>(
                             formControlName: 'password',
-                            obscureText: true,
-                            decoration: const InputDecoration(
+                            obscureText: !_passwordVisible,
+                            decoration: InputDecoration(
                               hintText: 'password',
-                              prefixIcon: Icon(Icons.lock_outline_rounded),
+                              prefixIcon:
+                                  const Icon(Icons.lock_outline_rounded),
+                              suffixIcon: IconButton(
+                                icon: Icon(
+                                  _passwordVisible
+                                      ? Icons.visibility_outlined
+                                      : Icons.visibility_off_outlined,
+                                  size: 20,
+                                  color: AppColors.warm,
+                                ),
+                                onPressed: () => setState(() =>
+                                    _passwordVisible = !_passwordVisible),
+                              ),
                             ),
                             validationMessages: {
                               'required': (_) => 'password is required',

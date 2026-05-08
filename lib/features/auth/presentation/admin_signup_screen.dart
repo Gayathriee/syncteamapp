@@ -23,6 +23,7 @@ class _AdminSignupScreenState extends ConsumerState<AdminSignupScreen> {
   });
 
   bool _isLoading = false;
+  bool _passwordVisible = false;
   String? _errorMessage;
 
   Future<void> _signUp() async {
@@ -48,6 +49,10 @@ class _AdminSignupScreenState extends ConsumerState<AdminSignupScreen> {
   }
 
   String _friendlyError(String raw) {
+    if (raw.contains('network') || raw.contains('SocketException') ||
+        raw.contains('host lookup') || raw.contains('RecaptchaCallWrapper')) {
+      return "no internet connection — connect to WiFi and try again";
+    }
     if (raw.contains('email-already-in-use')) {
       return "that email is already registered — sign in instead";
     }
@@ -57,7 +62,7 @@ class _AdminSignupScreenState extends ConsumerState<AdminSignupScreen> {
     if (raw.contains('already been used')) {
       return "that invite code has already been used";
     }
-    return "couldn't create account — try again";
+    return "couldn't create account: $raw";
   }
 
   @override
@@ -126,10 +131,21 @@ class _AdminSignupScreenState extends ConsumerState<AdminSignupScreen> {
                   const SizedBox(height: 12),
                   ReactiveTextField<String>(
                     formControlName: 'password',
-                    obscureText: true,
-                    decoration: const InputDecoration(
+                    obscureText: !_passwordVisible,
+                    decoration: InputDecoration(
                       hintText: 'password (min. 6 characters)',
-                      prefixIcon: Icon(Icons.lock_outline_rounded),
+                      prefixIcon: const Icon(Icons.lock_outline_rounded),
+                      suffixIcon: IconButton(
+                        icon: Icon(
+                          _passwordVisible
+                              ? Icons.visibility_outlined
+                              : Icons.visibility_off_outlined,
+                          size: 20,
+                          color: AppColors.warm,
+                        ),
+                        onPressed: () => setState(
+                            () => _passwordVisible = !_passwordVisible),
+                      ),
                     ),
                     validationMessages: {
                       'required': (_) => 'password is required',

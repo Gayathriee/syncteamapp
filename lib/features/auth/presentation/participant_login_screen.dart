@@ -24,6 +24,7 @@ class _ParticipantLoginScreenState
   });
 
   bool _isLoading = false;
+  bool _passwordVisible = false;
   String? _errorMessage;
 
   Future<void> _signIn() async {
@@ -49,8 +50,12 @@ class _ParticipantLoginScreenState
   }
 
   String _friendlyError(String raw) {
+    if (raw.contains('network') || raw.contains('SocketException') ||
+        raw.contains('host lookup') || raw.contains('RecaptchaCallWrapper')) {
+      return "no internet connection — connect to WiFi and try again";
+    }
     if (raw.contains('user-not-found') || raw.contains('wrong-password') ||
-        raw.contains('invalid-credential')) {
+        raw.contains('invalid-credential') || raw.contains('INVALID_LOGIN_CREDENTIALS')) {
       return "those credentials don't match — double-check and try again";
     }
     if (raw.contains('not a participant')) {
@@ -59,7 +64,7 @@ class _ParticipantLoginScreenState
     if (raw.contains('too-many-requests')) {
       return "too many attempts — give it a minute and try again";
     }
-    return "something went wrong, try again in a moment";
+    return "something went wrong: $raw";
   }
 
   @override
@@ -115,10 +120,22 @@ class _ParticipantLoginScreenState
                           const SizedBox(height: 12),
                           ReactiveTextField<String>(
                             formControlName: 'password',
-                            obscureText: true,
-                            decoration: const InputDecoration(
+                            obscureText: !_passwordVisible,
+                            decoration: InputDecoration(
                               hintText: 'password',
-                              prefixIcon: Icon(Icons.lock_outline_rounded),
+                              prefixIcon:
+                                  const Icon(Icons.lock_outline_rounded),
+                              suffixIcon: IconButton(
+                                icon: Icon(
+                                  _passwordVisible
+                                      ? Icons.visibility_outlined
+                                      : Icons.visibility_off_outlined,
+                                  size: 20,
+                                  color: AppColors.warm,
+                                ),
+                                onPressed: () => setState(
+                                    () => _passwordVisible = !_passwordVisible),
+                              ),
                             ),
                             validationMessages: {
                               'required': (_) => 'password is required',
@@ -157,7 +174,8 @@ class _ParticipantLoginScreenState
                     Row(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
-                        Text("new participant? ", style: AppTypography.bodySmall),
+                        Text("new participant? ",
+                            style: AppTypography.bodySmall),
                         GestureDetector(
                           onTap: () => context.go('/signup'),
                           child: Text('create account',

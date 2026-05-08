@@ -22,8 +22,29 @@ class AuthRepository {
       email: email,
       password: password,
     );
-    final doc = await _db.collection('users').doc(cred.user!.uid).get();
-    if (!doc.exists) throw Exception('account not found in study database');
+    final uid = cred.user!.uid;
+    final docRef = _db.collection('users').doc(uid);
+    var doc = await docRef.get();
+
+    // If no Firestore doc exists (e.g. account created directly in Firebase
+    // Console for testing), create a minimal participant doc on first login.
+    if (!doc.exists) {
+      final pseudonym = await _generatePseudonym();
+      final now = DateTime.now().millisecondsSinceEpoch;
+      await docRef.set({
+        'uid': uid,
+        'email': email,
+        'role': 'participant',
+        'pseudonym': pseudonym,
+        'displayName': pseudonym,
+        'monsterVariant': MonsterVariant.octopus.name,
+        'createdAtMs': now,
+        'consentAtMs': now,
+        'achievements': <String>[],
+        'baselineRmssdMs': null,
+      });
+      doc = await docRef.get();
+    }
 
     final user = UserModel.fromJson({'uid': doc.id, ...doc.data()!});
     if (!user.isParticipant) {
@@ -41,8 +62,17 @@ class AuthRepository {
       email: email,
       password: password,
     );
-    final doc = await _db.collection('users').doc(cred.user!.uid).get();
-    if (!doc.exists) throw Exception('admin account not found');
+    final uid = cred.user!.uid;
+    final docRef = _db.collection('users').doc(uid);
+    final doc = await docRef.get();
+
+    // If doc missing, the admin was not properly set up — give a clear error
+    // rather than crashing. They need to create /users/{uid} with role:admin.
+    if (!doc.exists) {
+      await _auth.signOut();
+      throw Exception(
+          'admin profile missing — create /users/$uid with role:admin in Firestore');
+    }
 
     final user = UserModel.fromJson({'uid': doc.id, ...doc.data()!});
     if (!user.isAdmin) {
